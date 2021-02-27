@@ -1,0 +1,15 @@
+{% extends "safe/base.html" %}
+
+{% block content %}
+
+{% for data in object_list %}
+<div class="content-section">
+  <div class="article-metadata">
+      <small class="text-muted">{{ data.date_created | date:'F d, Y - H:i' }}</small>
+    </div>
+    <h2 class="article-title">{{ data.website }}</h2>
+    <p class="article-content">{{ data.password }}</p>
+  </div>
+{% endfor %}
+    
+{% endblock content %}

@@ -1,0 +1,21 @@
+{% extends "safe/base.html" %}
+
+{% block content %}
+
+{% if not user.is_authenticated %}
+<div class="content-section">
+    <h1>Welcome!</h1>
+    <hr>
+    <p>Please login to view your saved passwords.</p>
+    <a href="{% url 'login' %}" class="btn btn-info">Login</a>
+</div>
+{% else %}
+<div class="content-section">
+    <h1>Welcome!</h1>
+    <hr>
+    <p>Enjoy your stay.</p>
+    <a href="{% url 'saved' %}" class="btn btn-info">Go to your saved passwords</a>
+</div>
+{% endif %}
+    
+{% endblock content %}
