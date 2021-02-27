@@ -3,6 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView
 from django.urls import reverse_lazy
 from .models import SavedPassword
+import pyperclip
+from random import shuffle, sample
 
 # Create your views here.
 def index(request):
@@ -18,14 +20,19 @@ class SavedListView(LoginRequiredMixin, ListView):
         return SavedPassword.objects.filter(saver_id=self.request.user.id).order_by('-date_created')
 
 def generate_password(request):
-    context = {
-        'password1': 'one',
-        'password1': 'two',
-        'password1': 'three',
-        'password1': 'four',
-        'password1': 'five',
-    }
-    return render(request, 'safe/generate_password.html',context)
+    passwords = []
+    number = [chr(i) for i in range(48,65)]
+    cap_letters = [chr(i) for i in range(65,91)]
+    small_letters = [chr(i) for i in range(97,123)]
+
+    while len(passwords) != 5:
+        a,b,c = sample(number,4),sample(cap_letters,4),sample(small_letters,4)
+        d = a+b+c
+        shuffle(d)
+        passwords.append(''.join(d))
+
+    print(passwords)
+    return render(request, 'safe/generate_password.html', {'password1': passwords})
 
 
 class PasswordAddView(LoginRequiredMixin, CreateView):
