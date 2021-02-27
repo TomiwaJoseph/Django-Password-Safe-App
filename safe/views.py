@@ -18,7 +18,14 @@ class SavedListView(LoginRequiredMixin, ListView):
         return SavedPassword.objects.filter(saver_id=self.request.user.id).order_by('-date_created')
 
 def generate_password(request):
-    return render(request, 'safe/generate_password.html')
+    context = {
+        'password1': 'one',
+        'password1': 'two',
+        'password1': 'three',
+        'password1': 'four',
+        'password1': 'five',
+    }
+    return render(request, 'safe/generate_password.html',context)
 
 
 class PasswordAddView(LoginRequiredMixin, CreateView):
