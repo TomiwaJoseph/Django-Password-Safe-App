@@ -8,6 +8,8 @@
     <hr>
     <p>Please login to view your saved passwords.</p>
     <a href="{% url 'login' %}" class="btn btn-info">Login</a>
+    <p style="display: inline-block;" class="mx-3">or</p>
+    <a href="{% url 'register' %}" class="btn btn-info">SignUp</a>
 </div>
 {% else %}
 <div class="content-section">
