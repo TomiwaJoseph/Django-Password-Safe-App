@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, CreateView
 from django.urls import reverse_lazy
 from .models import SavedPassword
@@ -23,6 +24,7 @@ class SavedListView(LoginRequiredMixin, ListView):
         return SavedPassword.objects.filter(saver_id=self.request.user.id).order_by('-date_created')
 
 
+@login_required
 def generate_password(request):
     global current_password
     current_password = ''
@@ -39,6 +41,8 @@ def generate_password(request):
 
     return render(request, 'safe/generate_password.html', {'password': passwords})
 
+
+@login_required
 def use_pass(request):
     global current_password
     current_password = request.POST.get('passw')
@@ -55,4 +59,4 @@ class PasswordAddView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_initial(self):
-        return {'password': current_password }
+        return {'password': current_password}
