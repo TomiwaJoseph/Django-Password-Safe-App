@@ -38,4 +38,3 @@ class SavedPassword(models.Model):
         self.password = self.de_encrypt(message, decrypt_key)
         super().save()
 
-# j@2YafCVBc10
