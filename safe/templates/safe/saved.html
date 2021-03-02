@@ -1,15 +1,20 @@
 {% extends "safe/base.html" %}
+{% load safe_tags %}
 
 {% block content %}
 
-{% for data in object_list %}
+
+{% for x in length %}
 <div class="content-section">
   <div class="article-metadata">
-      <small class="text-muted">{{ data.date_created | date:'F d, Y - H:i' }}</small>
-    </div>
-    <h2 class="article-title">{{ data.website }}</h2>
-    <p class="article-content">{{ data.password }}</p>
+  {% with lookup_result=object_list|lookup:x %}
+    <small class="text-muted">{{ lookup_result.date_created | date:'F d, Y - H:i' }}</small>
+  </div>
+  <h2 class="article-title">{{ lookup_result.website }}</h2>
+  {% endwith %}
+    <p class="article-content">{{ passwords|lookup:x }}</p>
   </div>
 {% endfor %}
+
     
 {% endblock content %}

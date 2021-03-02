@@ -20,8 +20,40 @@ class SavedListView(LoginRequiredMixin, ListView):
     template_name = 'safe/saved.html'
     ordering = ['-date_created']
 
+    def de_encrypt(self, message, key):
+        SYMBOLS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:;<=>?@'
+        key = -key
+        translated = ''
+
+        for symbol in message:
+            symbolIndex = SYMBOLS.find(symbol)
+            if symbolIndex == -1:
+                translated += symbol
+            else:
+                symbolIndex += key
+
+                if symbolIndex >= len(SYMBOLS):
+                    symbolIndex -= len(SYMBOLS)
+                elif symbolIndex < 0:
+                    symbolIndex += len(SYMBOLS)
+
+                translated += SYMBOLS[symbolIndex]
+        return translated
+
     def get_queryset(self):
-        return SavedPassword.objects.filter(saver_id=self.request.user.id).order_by('-date_created')
+        return SavedPassword.objects.filter(saver=self.request.user).order_by('-date_created')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        queryset = SavedPassword.objects.filter(saver=self.request.user).order_by('-date_created')
+
+        bad = []
+        for i in queryset:
+            bad.append(self.de_encrypt(i.password, 13))
+
+        context['passwords'] = bad
+        context['length'] = range(len(bad))
+        return context
 
 
 @login_required
